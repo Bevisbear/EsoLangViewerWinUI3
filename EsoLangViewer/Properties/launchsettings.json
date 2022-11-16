@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "EsoLangViewer (Unpackaged)": {
+        "commandName": "Project"
+      },
+      "EsoLangViewer (Package)": {
+        "commandName": "MsixPackage"
+      }
+    }
+}
