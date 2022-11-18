@@ -106,4 +106,7 @@
   <data name="Shell_SearchData.Content" xml:space="preserve">
     <value>SearchData</value>
   </data>
+  <data name="Shell_ImportData.Content" xml:space="preserve">
+    <value>ImportData</value>
+  </data>
 </root>

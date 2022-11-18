@@ -4,9 +4,50 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="using:EsoLangViewer.Controls"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" MinHeight="50" />
+            <RowDefinition Height="70" MinHeight="50" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <InfoBar IsOpen="True" Severity="Informational" Grid.Row="0"
+                 IsClosable="False"
+                 Title="File Mode" 
+                 Message="You on the file mode.">
+            <InfoBar.ActionButton>
+                <Button Content="Action" />
+            </InfoBar.ActionButton>
+        </InfoBar>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,10,0,10">
+            <ComboBox PlaceholderText="Select search type" Height="40" Width="200" Margin="0,0,0,10">
+                <x:String>ID</x:String>
+                <x:String>Type</x:String>
+                <x:String>English text</x:String>
+                <x:String>Chinese text</x:String>
+            </ComboBox>
+            
+            <AutoSuggestBox PlaceholderText="Search"
+        QueryIcon="Find" Width="500" Height="40" Margin="10,0,0,10" />
+
+            <ComboBox PlaceholderText="Select search position" Height="40" Width="200"  Margin="10,0,0,0">
+                <x:String>Only on head</x:String>
+                <x:String>Only on end</x:String>
+                <x:String>full</x:String>
+            </ComboBox>
+        </StackPanel>
         
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,10,0,0">
+            <CheckBox Content="Case Sensitive" />
+            <CheckBox Content="File Mode" />
+
+
+        </StackPanel>
+
+        <uc:LangDataGrid Grid.Row="3" />
+
     </Grid>
 </Page>

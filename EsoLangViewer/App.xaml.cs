@@ -68,6 +68,8 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
+            services.AddTransient<ImportDataViewModel>();
+            services.AddTransient<ImportDataPage>();
             services.AddTransient<SearchDataViewModel>();
             services.AddTransient<SearchDataPage>();
             services.AddTransient<SettingsViewModel>();

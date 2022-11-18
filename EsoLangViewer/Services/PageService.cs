@@ -19,6 +19,7 @@ public class PageService : IPageService
         Configure<ListDetailsViewModel, ListDetailsPage>();
         Configure<SettingsViewModel, SettingsPage>();
         Configure<SearchDataViewModel, SearchDataPage>();
+        Configure<ImportDataViewModel, ImportDataPage>();
     }
 
     public Type GetPageType(string key)
