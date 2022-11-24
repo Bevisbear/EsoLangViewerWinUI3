@@ -19,32 +19,28 @@
                  Title="File Mode" 
                  Message="You on the file mode.">
             <InfoBar.ActionButton>
-                <Button Content="Action" />
+                <Button x:Name="OpenFileButton" Content="Browser Data" Click="OpenFileButton_Click" />
             </InfoBar.ActionButton>
         </InfoBar>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,10,0,10">
-            <ComboBox PlaceholderText="Select search type" Height="40" Width="200" Margin="0,0,0,10">
-                <x:String>ID</x:String>
-                <x:String>Type</x:String>
-                <x:String>English text</x:String>
-                <x:String>Chinese text</x:String>
-            </ComboBox>
-            
-            <AutoSuggestBox PlaceholderText="Search"
+            <ComboBox x:Name="SearchTypeComboBox" ItemsSource="{x:Bind ViewModel.SearchType}" 
+                      Loaded="SearchTypeComboBox_Loaded" 
+                      SelectedValuePath="Item1" DisplayMemberPath="Item2"
+                      Height="40" Width="200" Margin="0,0,0,10" />
+
+
+            <AutoSuggestBox PlaceholderText="Search" Text="{x:Bind ViewModel.SearchKeyWord}"
         QueryIcon="Find" Width="500" Height="40" Margin="10,0,0,10" />
 
-            <ComboBox PlaceholderText="Select search position" Height="40" Width="200"  Margin="10,0,0,0">
-                <x:String>Only on head</x:String>
-                <x:String>Only on end</x:String>
-                <x:String>full</x:String>
-            </ComboBox>
+            <ComboBox x:Name="SearchPosComboBox" ItemsSource="{x:Bind ViewModel.SearchPos}" 
+                      Loaded="SearchPosComboBox_Loaded"
+                      SelectedValuePath="Item1" DisplayMemberPath="Item2"
+                      Height="40" Width="200"  Margin="10,0,0,0" />
         </StackPanel>
         
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,10,0,0">
             <CheckBox Content="Case Sensitive" />
-            <CheckBox Content="File Mode" />
-
-
+            <CheckBox Content="File Mode" IsChecked="True" IsEnabled="False" />
         </StackPanel>
 
         <uc:LangDataGrid Grid.Row="3" />

@@ -15,7 +15,7 @@
               Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
               IsHitTestVisible="True"
               VerticalAlignment="Top">
-            <Image Source="/Assets/WindowIcon.ico"
+            <Image Source="/Assets/BearIcon.ico"
                    HorizontalAlignment="Left"
                    Width="16"
                    Height="16" />
@@ -48,22 +48,27 @@
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_DataGrid" helpers:NavigationHelper.NavigateTo="EsoLangViewer.ViewModels.DataGridViewModel">
+                <!--<NavigationViewItem x:Uid="Shell_DataGrid" helpers:NavigationHelper.NavigateTo="EsoLangViewer.ViewModels.DataGridViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe80a;"/>
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_ListDetails" helpers:NavigationHelper.NavigateTo="EsoLangViewer.ViewModels.ListDetailsViewModel">
+                </NavigationViewItem>-->
+                <!--<NavigationViewItem x:Uid="Shell_ListDetails" helpers:NavigationHelper.NavigateTo="EsoLangViewer.ViewModels.ListDetailsViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xea37;"/>
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_SearchData" helpers:NavigationHelper.NavigateTo="EsoLangViewer.ViewModels.SearchDataViewModel">
+                </NavigationViewItem>-->
+                <!--<NavigationViewItem x:Uid="Shell_SearchData" helpers:NavigationHelper.NavigateTo="EsoLangViewer.ViewModels.SearchDataViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;"/>
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_ImportData" helpers:NavigationHelper.NavigateTo="EsoLangViewer.ViewModels.ImportDataViewModel">
+                </NavigationViewItem>-->
+                <!--<NavigationViewItem x:Uid="Shell_ImportData" helpers:NavigationHelper.NavigateTo="EsoLangViewer.ViewModels.ImportDataViewModel">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>-->
+                <NavigationViewItem x:Uid="Shell_ExportData" helpers:NavigationHelper.NavigateTo="EsoLangViewer.ViewModels.ExportDataViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;"/>
                     </NavigationViewItem.Icon>

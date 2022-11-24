@@ -109,4 +109,7 @@
   <data name="Shell_ImportData.Content" xml:space="preserve">
     <value>ImportData</value>
   </data>
+  <data name="Shell_ExportData.Content" xml:space="preserve">
+    <value>ExportData</value>
+  </data>
 </root>

@@ -18,12 +18,12 @@
                   AutoGenerateColumns="False" 
                   ColumnWidth="200*" Grid.Row="2" Margin="0,20,0,0">
             <controls:DataGrid.Columns>
-                <controls:DataGridTextColumn Binding="{Binding Id}" Header="文本GUID"  Visibility="Collapsed"/>
-                <controls:DataGridTextColumn Binding="{Binding TextId}" Header="文本ID"  Visibility="Visible"/>
-                <controls:DataGridTextColumn Binding="{Binding LangType}" Header="文本类型"  Visibility="Collapsed"/>
+                <!--<controls:DataGridTextColumn Binding="{Binding Id}" Header="文本GUID"  Visibility="Collapsed"/>-->
+                <controls:DataGridTextColumn Binding="{Binding Id}" Header="文本ID"  Visibility="Visible"/>
+                <controls:DataGridTextColumn Binding="{Binding Type}" Header="文本类型"  Visibility="Collapsed"/>
                 <controls:DataGridTextColumn Binding="{Binding LangEn}" Header="英文"  Visibility="Visible"/>
                 <controls:DataGridTextColumn Binding="{Binding LangZh}" Header="中文"  Visibility="Visible"/>
-                <controls:DataGridTextColumn Binding="{Binding ApiVersion}" Header="版本更新"  Visibility="Collapsed"/>
+                <!--<controls:DataGridTextColumn Binding="{Binding ApiVersion}" Header="版本更新"  Visibility="Collapsed"/>-->
             </controls:DataGrid.Columns>
         </controls:DataGrid>
 

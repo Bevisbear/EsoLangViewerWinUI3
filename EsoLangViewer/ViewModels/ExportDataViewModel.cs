@@ -2,16 +2,9 @@
 
 namespace EsoLangViewer.ViewModels;
 
-public class ImportDataViewModel : ObservableRecipient
+public class ExportDataViewModel : ObservableRecipient
 {
-    
-
-
-    public ImportDataViewModel()
+    public ExportDataViewModel()
     {
-
     }
-
-
-
 }

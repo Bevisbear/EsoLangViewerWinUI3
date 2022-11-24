@@ -66,18 +66,21 @@ public partial class App : Application
             // Core Services
             services.AddSingleton<ISampleDataService, SampleDataService>();
             services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<ILangSearchService, LangSearchService>();
 
             // Views and ViewModels
-            services.AddTransient<ImportDataViewModel>();
-            services.AddTransient<ImportDataPage>();
-            services.AddTransient<SearchDataViewModel>();
-            services.AddTransient<SearchDataPage>();
+            services.AddTransient<ExportDataViewModel>();
+            services.AddTransient<ExportDataPage>();
+            //services.AddTransient<ImportDataViewModel>();
+            //services.AddTransient<ImportDataPage>();
+            //services.AddTransient<SearchDataViewModel>();
+            //services.AddTransient<SearchDataPage>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();
-            services.AddTransient<ListDetailsViewModel>();
-            services.AddTransient<ListDetailsPage>();
-            services.AddTransient<DataGridViewModel>();
-            services.AddTransient<DataGridPage>();
+            //services.AddTransient<ListDetailsViewModel>();
+            //services.AddTransient<ListDetailsPage>();
+            //services.AddTransient<DataGridViewModel>();
+            //services.AddTransient<DataGridPage>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<MainPage>();
             services.AddTransient<ShellPage>();

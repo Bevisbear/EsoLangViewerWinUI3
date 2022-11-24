@@ -20,6 +20,7 @@ public class PageService : IPageService
         Configure<SettingsViewModel, SettingsPage>();
         Configure<SearchDataViewModel, SearchDataPage>();
         Configure<ImportDataViewModel, ImportDataPage>();
+        Configure<ExportDataViewModel, ExportDataPage>();
     }
 
     public Type GetPageType(string key)
