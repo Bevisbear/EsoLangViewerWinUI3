@@ -4,6 +4,7 @@ using EsoLangViewer.Controls;
 using EsoLangViewer.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.Windows.AppLifecycle;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 
@@ -36,21 +37,62 @@ public sealed partial class MainPage : Page
     {
         IReadOnlyList<StorageFile> files = await OpenFileBrowser();
 
-        if (files.Count > 0)
+        if (files != null && files.Count > 1)
         {
             var dialog = new ContentDialog
             {
                 // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-                XamlRoot = this.XamlRoot, 
+                XamlRoot = this.XamlRoot,
                 Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
                 Title = "Dialog Test",
                 PrimaryButtonText = "Save",
                 CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Primary,
-                Content = new DialogWithLoadingContent(),
+                Content = "Ask",
             };
 
             var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                //dialog.Title = "Dialog Test";
+                //dialog.Content = new DialogWithLoadingContent();
+                //dialog.PrimaryButtonText = null; 
+                //dialog.CloseButtonText = null;
+                OpenFileButton.IsEnabled = false;
+                FileInfoBar.Message = "Loding...";
+                LoadLangData_InProgress.Visibility = Visibility.Visible;
+
+                var parseDone = await ViewModel.ParseLangFile(files);
+
+                //await dialog.ShowAsync();
+
+                if (parseDone)
+                {
+                    ViewModel.IsLangDataVaild = true;
+                    OpenFileButton.IsEnabled = true;
+                    FileInfoBar.Message = "Loding Completed!";
+                    FileInfoBar.Severity = InfoBarSeverity.Success;
+                    LoadLangData_InProgress.Visibility = Visibility.Collapsed;
+                }
+
+            }
+        }
+        else
+        {
+            var dialog = new ContentDialog
+            {
+                // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+                XamlRoot = this.XamlRoot,
+                Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
+                Title = "Dialog Test",
+                //PrimaryButtonText = "Save",
+                CloseButtonText = "Cancel",
+                DefaultButton = ContentDialogButton.Primary,
+                Content = "Fail",
+            };
+
+            await dialog.ShowAsync();
 
         }
 
@@ -60,7 +102,7 @@ public sealed partial class MainPage : Page
     private async Task<IReadOnlyList<StorageFile>> OpenFileBrowser()
     {
         var picker = new FileOpenPicker();   //WinUI3 获取文件列表窗口的新API。
-        IReadOnlyList<StorageFile> files = new List<StorageFile>();
+        //IReadOnlyList<StorageFile> files = new List<StorageFile>();
 
         picker.FileTypeFilter.Add(".lang");
         picker.FileTypeFilter.Add(".lua");
@@ -70,7 +112,7 @@ public sealed partial class MainPage : Page
         var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
         WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
 
-        files = await picker.PickMultipleFilesAsync();
+        return await picker.PickMultipleFilesAsync();
 
         //if (files.Count > 0)
         //{
@@ -84,6 +126,6 @@ public sealed partial class MainPage : Page
         //    Debug.WriteLine(output);
         //}
 
-        return files;
+        //return files;
     }
 }

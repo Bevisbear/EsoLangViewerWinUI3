@@ -8,7 +8,7 @@ using EsoLangViewer.Core.Models;
 using static System.Convert;
 
 namespace EsoLangViewer.Core.Services;
-internal class LangFileService : ILangFileService
+public class LangFileService : ILangFileService
 {
     public Task<List<LangFile>> ReadLangWithFileMode(string FilePath)
     {

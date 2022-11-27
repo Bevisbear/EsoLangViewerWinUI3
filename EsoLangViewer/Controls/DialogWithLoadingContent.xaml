@@ -13,7 +13,7 @@
 
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <!-- Content body -->
-        <TextBlock Text="Loding..." TextWrapping="Wrap" />
+        <!--<TextBlock Text="Loding..." TextWrapping="Wrap" />-->
         <ProgressRing IsActive="True" />
     </StackPanel>
 

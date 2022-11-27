@@ -14,7 +14,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <InfoBar IsOpen="True" Severity="Informational" Grid.Row="0"
+        <InfoBar x:Name="FileInfoBar" IsOpen="True" Severity="Informational" Grid.Row="0"
                  IsClosable="False"
                  Title="File Mode" 
                  Message="You on the file mode.">
@@ -22,18 +22,23 @@
                 <Button x:Name="OpenFileButton" Content="Browser Data" Click="OpenFileButton_Click" />
             </InfoBar.ActionButton>
         </InfoBar>
+        <ProgressRing x:Name="LoadLangData_InProgress" Grid.Row="0" Visibility="Collapsed"
+                     IsIndeterminate="True" />
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,10,0,10">
             <ComboBox x:Name="SearchTypeComboBox" ItemsSource="{x:Bind ViewModel.SearchType}" 
-                      Loaded="SearchTypeComboBox_Loaded" 
+                      Loaded="SearchTypeComboBox_Loaded"
+                      IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
                       SelectedValuePath="Item1" DisplayMemberPath="Item2"
                       Height="40" Width="200" Margin="0,0,0,10" />
 
 
             <AutoSuggestBox PlaceholderText="Search" Text="{x:Bind ViewModel.SearchKeyWord}"
-        QueryIcon="Find" Width="500" Height="40" Margin="10,0,0,10" />
+                            QueryIcon="Find" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
+                            Width="500" Height="40" Margin="10,0,0,10" />
 
             <ComboBox x:Name="SearchPosComboBox" ItemsSource="{x:Bind ViewModel.SearchPos}" 
                       Loaded="SearchPosComboBox_Loaded"
+                      IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
                       SelectedValuePath="Item1" DisplayMemberPath="Item2"
                       Height="40" Width="200"  Margin="10,0,0,0" />
         </StackPanel>
@@ -43,7 +48,7 @@
             <CheckBox Content="File Mode" IsChecked="True" IsEnabled="False" />
         </StackPanel>
 
-        <uc:LangDataGrid Grid.Row="3" />
+        <uc:LangDataGrid Grid.Row="3" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}" />
 
     </Grid>
 </Page>

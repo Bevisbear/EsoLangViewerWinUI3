@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EsoLangViewer.Core.Models;
 
 namespace EsoLangViewer.Core.Contracts.Services;
-internal interface ILangFileService
+public interface ILangFileService
 {
     Task<List<LangFile>> ReadLangWithFileMode(string FilePath);
 }
