@@ -9,17 +9,22 @@ using EsoLangViewer.Core.Models;
 namespace EsoLangViewer.Core.Services;
 public class LangSearchService : ILangSearchService
 {
-    private Dictionary<string, LangData> _LangDict = new();
+    private Dictionary<string, LangData> _LangDict;
 
-
-    public Task<List<LangData>> SearchLangData(string keyword, ushort searchType, ushort searchPos)
+    public Task<List<LangData>> SearchLangData(string keyword, int searchType, int searchPos)
     {
 
-        if (_LangDict.Count >= 0)
+        if (_LangDict != null && _LangDict.Count > 1)
         {
 
         }
 
         return null;
+    }
+
+    public bool SetLangData(Dictionary<string, LangData> langData)
+    {
+        _LangDict = langData;
+        return _LangDict.Count > 1;
     }
 }

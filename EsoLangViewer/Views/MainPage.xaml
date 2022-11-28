@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="using:EsoLangViewer.Controls"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
@@ -32,8 +33,8 @@
                       Height="40" Width="200" Margin="0,0,0,10" />
 
 
-            <AutoSuggestBox PlaceholderText="Search" Text="{x:Bind ViewModel.SearchKeyWord}"
-                            QueryIcon="Find" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
+            <AutoSuggestBox x:Name="SearchBox" PlaceholderText="Search" Text="{x:Bind ViewModel.SearchKeyWord}"
+                            QueryIcon="Find" QuerySubmitted="SearchBox_QuerySubmitted" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
                             Width="500" Height="40" Margin="10,0,0,10" />
 
             <ComboBox x:Name="SearchPosComboBox" ItemsSource="{x:Bind ViewModel.SearchPos}" 
@@ -48,7 +49,21 @@
             <CheckBox Content="File Mode" IsChecked="True" IsEnabled="False" />
         </StackPanel>
 
-        <uc:LangDataGrid Grid.Row="3" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}" />
+        <!--<uc:LangDataGrid Grid.Row="3" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}" />-->
+
+        <controls:DataGrid ItemsSource="{x:Bind ViewModel.Langdata, Mode=OneWay}"
+                  SelectedItem="{x:Bind ViewModel.SelectedLang, Mode=TwoWay}"
+                  AutoGenerateColumns="False" 
+                  ColumnWidth="200*" Grid.Row="3" Margin="0,20,0,0" Height="450">
+            <controls:DataGrid.Columns>
+                <!--<controls:DataGridTextColumn Binding="{Binding Id}" Header="文本GUID"  Visibility="Collapsed"/>-->
+                <controls:DataGridTextColumn Binding="{Binding Id}" Header="文本ID"  Visibility="Visible"/>
+                <controls:DataGridTextColumn Binding="{Binding Type}" Header="文本类型"  Visibility="Collapsed"/>
+                <controls:DataGridTextColumn Binding="{Binding LangEn}" Header="英文"  Visibility="Visible"/>
+                <controls:DataGridTextColumn Binding="{Binding LangZh}" Header="中文"  Visibility="Visible"/>
+                <!--<controls:DataGridTextColumn Binding="{Binding ApiVersion}" Header="版本更新"  Visibility="Collapsed"/>-->
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
 
     </Grid>
 </Page>

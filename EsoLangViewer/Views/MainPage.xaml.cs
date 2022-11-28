@@ -55,17 +55,11 @@ public sealed partial class MainPage : Page
 
             if (result == ContentDialogResult.Primary)
             {
-                //dialog.Title = "Dialog Test";
-                //dialog.Content = new DialogWithLoadingContent();
-                //dialog.PrimaryButtonText = null; 
-                //dialog.CloseButtonText = null;
                 OpenFileButton.IsEnabled = false;
                 FileInfoBar.Message = "Loding...";
                 LoadLangData_InProgress.Visibility = Visibility.Visible;
 
-                var parseDone = await ViewModel.ParseLangFile(files);
-
-                //await dialog.ShowAsync();
+                var parseDone = await  ViewModel.ParseLangFile(files);
 
                 if (parseDone)
                 {
@@ -75,7 +69,6 @@ public sealed partial class MainPage : Page
                     FileInfoBar.Severity = InfoBarSeverity.Success;
                     LoadLangData_InProgress.Visibility = Visibility.Collapsed;
                 }
-
             }
         }
         else
@@ -93,9 +86,7 @@ public sealed partial class MainPage : Page
             };
 
             await dialog.ShowAsync();
-
         }
-
 
     }
 
@@ -118,7 +109,7 @@ public sealed partial class MainPage : Page
         //{
         //    StringBuilder output = new StringBuilder("Picked files:\n");
         //    // Application now has read/write access to the picked file(s)
-        //    foreach (StorageFile file in files)
+        //    foreach (StorageFile file in files)SearchPosComboBox
         //    {
         //        output.Append(file.Name + "\n");
                 
@@ -127,5 +118,30 @@ public sealed partial class MainPage : Page
         //}
 
         //return files;
+    }
+
+    private async void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        FileInfoBar.Message = "Loding...";
+        FileInfoBar.Severity = InfoBarSeverity.Informational;
+
+        if (sender.Text != null && sender.Text.Length > 1)
+        {
+            LoadLangData_InProgress.Visibility = Visibility.Visible;
+
+            bool searchDone = await Task.Run(() => ViewModel.SearchLang(sender.Text, SearchTypeComboBox.SelectedIndex, SearchPosComboBox.SelectedIndex));
+
+            if (searchDone)
+            {
+                FileInfoBar.Message = "Search Completed";
+                LoadLangData_InProgress.Visibility = Visibility.Collapsed;
+            }
+        }
+        else
+        {
+            FileInfoBar.Message = "Plase text content or a word.";
+            FileInfoBar.Severity = InfoBarSeverity.Warning;
+        }
+        
     }
 }

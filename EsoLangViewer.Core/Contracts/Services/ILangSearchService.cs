@@ -4,5 +4,6 @@ using EsoLangViewer.Core.Models;
 namespace EsoLangViewer.Core.Contracts.Services;
 public interface ILangSearchService
 {
-    Task<List<LangData>> SearchLangData(string keyword, ushort searchType, ushort searchPos);
+    Task<List<LangData>> SearchLangData(string keyword, int searchType, int searchPos);
+    bool SetLangData(Dictionary<string, LangData> langData);
 }

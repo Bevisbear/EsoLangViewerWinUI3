@@ -67,6 +67,7 @@ public partial class App : Application
             services.AddSingleton<ISampleDataService, SampleDataService>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<ILangSearchService, LangSearchService>();
+            services.AddTransient<ILangFileService, LangFileService>();
 
             // Views and ViewModels
             services.AddTransient<ExportDataViewModel>();

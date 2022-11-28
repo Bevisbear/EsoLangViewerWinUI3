@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using EsoLangViewer.Core.Contracts.Services;
 using EsoLangViewer.Core.Models;
 using EsoLangViewer.Core.Services;
@@ -10,6 +11,8 @@ public class MainViewModel : ObservableRecipient
 {
 
     private bool _islangDataVaild;
+    private LangData _selectedLang;
+    //private ObservableCollection<LangData> _langdata;
 
     public List<Tuple<ushort, string>> SearchType
     {
@@ -40,8 +43,16 @@ public class MainViewModel : ObservableRecipient
         set => SetProperty(ref _islangDataVaild, value); 
     }
 
-    private ILangSearchService _langSearchService;
-    private ILangFileService _langfileService;
+    public LangData SelectedLang
+    {
+        get => _selectedLang;
+        set => SetProperty(ref _selectedLang, value);
+    }
+
+    public ObservableCollection<LangData> Langdata { get; } = new ObservableCollection<LangData>();
+
+    private readonly ILangSearchService _langSearchService;
+    private readonly ILangFileService _langfileService;
 
     public MainViewModel(ILangSearchService langSearchService, ILangFileService langfileService)
     {
@@ -49,18 +60,12 @@ public class MainViewModel : ObservableRecipient
         _langfileService = langfileService;
     }
 
-
     public async Task<bool> ParseLangFile(IReadOnlyList<StorageFile> files)
     {
-        //List<LangFile> langEn;
-        //List<LangFile> lang2;
-
         Dictionary<string, LangData> langDict = new Dictionary<string, LangData>();
 
-        //string langEnPath = files.ElementAt(0).Path;
-
         var langEn = await _langfileService.ReadLangWithFileMode(files.ElementAt(0).Path);
-        var lang2 = await _langfileService.ReadLangWithFileMode(files.ElementAt(1).Path);
+        var langZh = await _langfileService.ReadLangWithFileMode(files.ElementAt(1).Path);
 
         foreach (var en in langEn)
         {
@@ -68,22 +73,42 @@ public class MainViewModel : ObservableRecipient
 
             if (!langDict.ContainsKey(uniqueId))
             {
-                langDict.Add(uniqueId, new LangData { })
+                langDict.Add(uniqueId, new LangData { Id = uniqueId, Type = en.Type, LangEn = en.Lang });
             }
-
         }
 
-
-
-        foreach (StorageFile file in files)
+        foreach (var zh in langZh)
         {
-            langEn = await _langfileService.ReadLangWithFileMode(file.Path);
+            var uniqueId = zh.Type.ToString() + "-" + zh.Unknown.ToString() + "-" + zh.Index.ToString();
+
+            if (langDict.ContainsKey(uniqueId))
+            {
+                langDict[uniqueId].LangZh = zh.Lang;
+            }
         }
 
+        //var first10k = langDict.Values.Take(10000);
 
-        await Task.Delay(2000);
-        return true;
+        //foreach (var lang in first10k)
+        //{
+        //    Langdata.Add(lang);
+        //}
+
+        return _langSearchService.SetLangData(langDict);
     }
 
+    public async Task<bool> SearchLang(string keyword, int searchType, int searchPos)
+    {
+        var list = await _langSearchService.SearchLangData(keyword, searchType, searchPos);
+
+        if (list != null && list.Count > 0)
+        {
+            foreach (var lang in list)
+            {
+                Langdata.Add(lang);
+            }
+        }
+        return Langdata.Count > 0;
+    }
 
 }
