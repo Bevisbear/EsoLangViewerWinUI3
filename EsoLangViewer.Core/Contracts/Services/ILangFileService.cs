@@ -8,5 +8,5 @@ using EsoLangViewer.Core.Models;
 namespace EsoLangViewer.Core.Contracts.Services;
 public interface ILangFileService
 {
-    Task<List<LangFile>> ReadLangWithFileMode(string FilePath);
+    List<LangFile> ReadLangWithFileMode(string FilePath);
 }

@@ -59,7 +59,7 @@ public sealed partial class MainPage : Page
                 FileInfoBar.Message = "Loding...";
                 LoadLangData_InProgress.Visibility = Visibility.Visible;
 
-                var parseDone = await  ViewModel.ParseLangFile(files);
+                var parseDone = await Task.Run(() => ViewModel.ParseLangFile(files));
 
                 if (parseDone)
                 {
@@ -129,7 +129,7 @@ public sealed partial class MainPage : Page
         {
             LoadLangData_InProgress.Visibility = Visibility.Visible;
 
-            bool searchDone = await Task.Run(() => ViewModel.SearchLang(sender.Text, SearchTypeComboBox.SelectedIndex, SearchPosComboBox.SelectedIndex));
+            bool searchDone = await ViewModel.SearchLang(sender.Text, SearchTypeComboBox.SelectedIndex, SearchPosComboBox.SelectedIndex);
 
             if (searchDone)
             {

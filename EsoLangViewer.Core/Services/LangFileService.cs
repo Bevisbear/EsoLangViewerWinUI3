@@ -10,7 +10,7 @@ using static System.Convert;
 namespace EsoLangViewer.Core.Services;
 public class LangFileService : ILangFileService
 {
-    public Task<List<LangFile>> ReadLangWithFileMode(string FilePath)
+    public List<LangFile> ReadLangWithFileMode(string FilePath)
     {
         int _filesize;
         const int _textIdRecoredSize = 16;
@@ -118,7 +118,7 @@ public class LangFileService : ILangFileService
             //    langId, unknown, index, offeset, lang.TextEn);
         }
 
-        return Task.FromResult(_data);
+        return _data;
 
 
     }

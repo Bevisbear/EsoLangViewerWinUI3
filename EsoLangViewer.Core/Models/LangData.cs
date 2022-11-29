@@ -15,11 +15,11 @@ public class LangData
     {
         get; set; 
     }
-    public string LangEn
+    public string? LangEn
     {
         get; set;
     }
-    public string LangZh
+    public string? LangZh
     {
         get; set;
     }

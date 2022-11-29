@@ -60,12 +60,12 @@ public class MainViewModel : ObservableRecipient
         _langfileService = langfileService;
     }
 
-    public async Task<bool> ParseLangFile(IReadOnlyList<StorageFile> files)
+    public bool ParseLangFile(IReadOnlyList<StorageFile> files)
     {
         Dictionary<string, LangData> langDict = new Dictionary<string, LangData>();
 
-        var langEn = await _langfileService.ReadLangWithFileMode(files.ElementAt(0).Path);
-        var langZh = await _langfileService.ReadLangWithFileMode(files.ElementAt(1).Path);
+        var langEn = _langfileService.ReadLangWithFileMode(files.ElementAt(0).Path);
+        var langZh = _langfileService.ReadLangWithFileMode(files.ElementAt(1).Path);
 
         foreach (var en in langEn)
         {
@@ -99,7 +99,12 @@ public class MainViewModel : ObservableRecipient
 
     public async Task<bool> SearchLang(string keyword, int searchType, int searchPos)
     {
-        var list = await _langSearchService.SearchLangData(keyword, searchType, searchPos);
+        if (Langdata.Count > 0)
+        {
+            Langdata.Clear();
+        }
+
+        var list = await Task.Run(() => _langSearchService.SearchLangData(keyword, searchType, searchPos));
 
         if (list != null && list.Count > 0)
         {
