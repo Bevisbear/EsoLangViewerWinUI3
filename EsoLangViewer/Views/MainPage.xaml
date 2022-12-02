@@ -32,7 +32,6 @@
                       SelectedValuePath="Item1" DisplayMemberPath="Item2"
                       Height="40" Width="200" Margin="0,0,0,10" />
 
-
             <AutoSuggestBox x:Name="SearchBox" PlaceholderText="Search" Text="{x:Bind ViewModel.SearchKeyWord}"
                             QueryIcon="Find" QuerySubmitted="SearchBox_QuerySubmitted" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
                             Width="500" Height="40" Margin="10,0,0,10" />
@@ -43,13 +42,11 @@
                       SelectedValuePath="Item1" DisplayMemberPath="Item2"
                       Height="40" Width="200"  Margin="10,0,0,0" />
         </StackPanel>
-        
+
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,10,0,0">
             <CheckBox Content="Case Sensitive" />
             <CheckBox Content="File Mode" IsChecked="True" IsEnabled="False" />
         </StackPanel>
-
-        <!--<uc:LangDataGrid Grid.Row="3" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}" />-->
 
         <controls:DataGrid ItemsSource="{x:Bind ViewModel.Langdata, Mode=OneWay}"
                   SelectedItem="{x:Bind ViewModel.SelectedLang, Mode=TwoWay}"

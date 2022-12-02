@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using CommunityToolkit.WinUI;
 using EsoLangViewer.Controls;
 using EsoLangViewer.ViewModels;
 using Microsoft.UI.Xaml;
@@ -122,7 +123,7 @@ public sealed partial class MainPage : Page
 
     private async void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
-        FileInfoBar.Message = "Loding...";
+        FileInfoBar.Message = "Searching".GetLocalized();
         FileInfoBar.Severity = InfoBarSeverity.Informational;
 
         if (sender.Text != null && sender.Text.Length > 1)

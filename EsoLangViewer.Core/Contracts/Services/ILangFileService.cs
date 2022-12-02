@@ -9,4 +9,5 @@ namespace EsoLangViewer.Core.Contracts.Services;
 public interface ILangFileService
 {
     List<LangFile> ReadLangWithFileMode(string FilePath);
+    List<LuaFile> ReadLuaWithFileMode(string FilePath, bool isPreGame = false);
 }

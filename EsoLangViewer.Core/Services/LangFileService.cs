@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EsoLangViewer.Core.Contracts.Services;
 using EsoLangViewer.Core.Models;
@@ -123,6 +124,38 @@ public class LangFileService : ILangFileService
 
     }
 
+    public List<LuaFile> ReadLuaWithFileMode(string FilePath, bool isPreGame = false)
+    {
+        //string input;
+        string pattern = @"^[\s]*SafeAddString\(?[\s]*(\w+)[,\s]+\""(.+)\""[^\""]+$";
+
+        var luaResult = new List<LuaFile>();
+        var data = File.ReadAllLines(FilePath);
+
+        foreach (var line in data)
+        {
+            if (line != null || line != "")
+            {
+                foreach (Match match in Regex.Matches(line, pattern, RegexOptions.IgnoreCase))
+                {
+                    string id = match.Groups[1].Value;
+                    string text = match.Groups[2].Value;
+
+                    if (isPreGame)
+                    {
+                        luaResult.Add(new LuaFile { Id = id, Content = text, Type = 1 });
+                    }
+                    else
+                    {
+                        luaResult.Add(new LuaFile { Id = id, Content = text, Type = 2 });
+                    }
+                }
+            }
+        }
+
+        return luaResult;
+    }
+
     /// <summary>
     /// Turn hex byte string to byte array.
     /// 
@@ -142,4 +175,6 @@ public class LangFileService : ILangFileService
         }
         return raw;
     }
+
+    
 }

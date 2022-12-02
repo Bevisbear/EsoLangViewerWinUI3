@@ -12,6 +12,7 @@ namespace EsoLangViewer.Core.Services;
 public class LangSearchService : ILangSearchService
 {
     private Dictionary<string, LangData> _LangDict;
+    private Dictionary<string, LuaData> _LuaDict;
 
     public List<LangData> SearchLangData(string keyword, int searchType, int searchPos)
     {
@@ -30,12 +31,43 @@ public class LangSearchService : ILangSearchService
             };
         }
 
+        if (_LuaDict != null && _LuaDict.Count > 1)
+        {
+            if (langtext != null)
+            {
+                var luaResult = searchType switch
+                {
+                    1 => _LuaDict.Where(l => l.Key == keyword).Select(d => d.Value).ToList(),
+                    //2 => _LuaDict.Select(d => d.Value).ToList(),
+                    3 => _LuaDict.Where(l => l.Value.ContentEn != null && l.Value.ContentEn.Contains(keyword)).Select(l => l.Value).ToList(),
+                    4 => _LuaDict.Where(l => l.Value.ContentZh != null && l.Value.ContentZh.Contains(keyword)).Select(l => l.Value).ToList(),
+                };
+
+                if (luaResult != null && luaResult.Count > 0)
+                {
+                    foreach(var l in luaResult)
+                    {
+                        langtext.Add(new LangData { Id = l.Id, LangEn = l.ContentEn, LangZh = l.ContentZh });
+                    }
+                }
+
+                if (searchType == 2 && ToInt32(keyword) == 100)
+                {
+                    foreach (var lua in _LuaDict)
+                    {
+                        langtext.Add(new LangData { Id = lua.Value.Id, LangEn = lua.Value.ContentEn, LangZh = lua.Value.ContentZh });
+                    }
+                }
+            }
+        }
+
         return langtext;
     }
 
-    public bool SetLangData(Dictionary<string, LangData> langData)
+    public bool SetLangData(Dictionary<string, LangData> langData, Dictionary<string, LuaData> luaData)
     {
         _LangDict = langData;
+        _LuaDict = luaData;
         return _LangDict.Count > 1;
     }
 }
