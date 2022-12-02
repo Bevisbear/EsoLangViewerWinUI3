@@ -17,6 +17,7 @@ public class LangSearchService : ILangSearchService
     public List<LangData> SearchLangData(string keyword, int searchType, int searchPos)
     {
         List<LangData> langtext = null;
+        List<LuaData> luaResult = null;
         Debug.WriteLine(keyword);
 
         if (_LangDict != null && _LangDict.Count > 1)
@@ -35,12 +36,19 @@ public class LangSearchService : ILangSearchService
         {
             if (langtext != null)
             {
-                var luaResult = searchType switch
+                switch (searchType) 
                 {
-                    1 => _LuaDict.Where(l => l.Key == keyword).Select(d => d.Value).ToList(),
-                    //2 => _LuaDict.Select(d => d.Value).ToList(),
-                    3 => _LuaDict.Where(l => l.Value.ContentEn != null && l.Value.ContentEn.Contains(keyword)).Select(l => l.Value).ToList(),
-                    4 => _LuaDict.Where(l => l.Value.ContentZh != null && l.Value.ContentZh.Contains(keyword)).Select(l => l.Value).ToList(),
+                    case 1:
+                        luaResult = _LuaDict.Where(l => l.Key == keyword).Select(d => d.Value).ToList();
+                        break;
+                    case 3:
+                        luaResult = _LuaDict.Where(l => l.Value.ContentEn != null && l.Value.ContentEn.Contains(keyword)).Select(l => l.Value).ToList();
+                        break;
+                    case 4:
+                        luaResult = _LuaDict.Where(l => l.Value.ContentZh != null && l.Value.ContentZh.Contains(keyword)).Select(l => l.Value).ToList();
+                        break;
+                    default:
+                        break;
                 };
 
                 if (luaResult != null && luaResult.Count > 0)

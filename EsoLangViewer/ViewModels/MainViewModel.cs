@@ -214,7 +214,7 @@ public class MainViewModel : ObservableRecipient
         //    Langdata.Add(lang);
         //}
 
-        return _langSearchService.SetLangData(langDict);
+        return _langSearchService.SetLangData(langDict, luaData);
     }
 
     public async Task<bool> SearchLang(string keyword, int searchType, int searchPos)
