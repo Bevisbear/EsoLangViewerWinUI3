@@ -5,8 +5,7 @@
     <Platforms>x86;x64;arm64;AnyCPU</Platforms>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
