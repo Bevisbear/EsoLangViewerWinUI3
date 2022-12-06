@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using CommunityToolkit.WinUI;
 using EsoLangViewer.Controls;
+using EsoLangViewer.Core.Models;
 using EsoLangViewer.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -58,7 +60,7 @@ public sealed partial class MainPage : Page
             {
                 OpenFileButton.IsEnabled = false;
                 FileInfoBar.Message = "Loding...";
-                LoadLangData_InProgress.Visibility = Visibility.Visible;
+                DataInProgress.Visibility = Visibility.Visible;
 
                 var parseDone = await Task.Run(() => ViewModel.ParseLangFile(files));
 
@@ -68,7 +70,7 @@ public sealed partial class MainPage : Page
                     OpenFileButton.IsEnabled = true;
                     FileInfoBar.Message = "Loding Completed!";
                     FileInfoBar.Severity = InfoBarSeverity.Success;
-                    LoadLangData_InProgress.Visibility = Visibility.Collapsed;
+                    DataInProgress.Visibility = Visibility.Collapsed;
                 }
             }
         }
@@ -94,7 +96,6 @@ public sealed partial class MainPage : Page
     private async Task<IReadOnlyList<StorageFile>> OpenFileBrowser()
     {
         var picker = new FileOpenPicker();   //WinUI3 获取文件列表窗口的新API。
-        //IReadOnlyList<StorageFile> files = new List<StorageFile>();
 
         picker.FileTypeFilter.Add(".lang");
         picker.FileTypeFilter.Add(".lua");
@@ -105,20 +106,6 @@ public sealed partial class MainPage : Page
         WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
 
         return await picker.PickMultipleFilesAsync();
-
-        //if (files.Count > 0)
-        //{
-        //    StringBuilder output = new StringBuilder("Picked files:\n");
-        //    // Application now has read/write access to the picked file(s)
-        //    foreach (StorageFile file in files)SearchPosComboBox
-        //    {
-        //        output.Append(file.Name + "\n");
-                
-        //    }
-        //    Debug.WriteLine(output);
-        //}
-
-        //return files;
     }
 
     private async void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -128,14 +115,15 @@ public sealed partial class MainPage : Page
 
         if (sender.Text != null && sender.Text.Length > 1)
         {
-            LoadLangData_InProgress.Visibility = Visibility.Visible;
+            DataInProgress.Visibility = Visibility.Visible;
 
             bool searchDone = await ViewModel.SearchLang(sender.Text, SearchTypeComboBox.SelectedIndex, SearchPosComboBox.SelectedIndex);
 
             if (searchDone)
             {
-                FileInfoBar.Message = "Search Completed";
-                LoadLangData_InProgress.Visibility = Visibility.Collapsed;
+                FileInfoBar.Message = "Search Completed, list count: " + ViewModel.Langdata.Count.ToString();
+                DataInProgress.Visibility = Visibility.Collapsed;
+                ViewModel.CanExportText = true;
             }
         }
         else
@@ -145,4 +133,68 @@ public sealed partial class MainPage : Page
         }
         
     }
+
+    private void ExportButton_Click(object sender, RoutedEventArgs e)
+    {
+        List<LangData> exportData = new();
+
+        if (ViewModel.ExportSelectedLangdata)
+        {
+            if (LangDataGrid.SelectedItems != null && LangDataGrid.SelectedItems.Count >= 1)
+            {
+                exportData = (List<LangData>)LangDataGrid.SelectedItems;
+            }
+            else
+            {
+                FileInfoBar.Message = "null list".GetLocalized();
+                FileInfoBar.Severity = InfoBarSeverity.Warning;
+            }
+        }
+        else
+        {
+            if (ViewModel.Langdata != null && ViewModel.Langdata.Count >= 1)
+            {
+                exportData = ViewModel.Langdata.ToList();
+            }
+            else
+            {
+                FileInfoBar.Message = "null list".GetLocalized();
+                FileInfoBar.Severity = InfoBarSeverity.Warning;
+            }
+
+        }
+
+        //var selectedItems = (List<LangData>)LangDataGrid.SelectedItems;
+        var firstLangType = exportData.FirstOrDefault();
+        bool isHaveDifferentType = false;
+
+        if (exportData.Count >= 1)
+        {
+            if (firstLangType != null)
+            {
+                foreach (var lang in exportData)
+                {
+                    if (lang.Type != firstLangType.Type)
+                    {
+                        FileInfoBar.Message = "not the same type".GetLocalized();
+                        FileInfoBar.Severity = InfoBarSeverity.Warning;
+                        isHaveDifferentType = true;
+                        break;
+                    }
+                }
+
+                if (!isHaveDifferentType)
+                {
+                    ViewModel.ExportToFile(exportData);
+                }
+
+            }
+        }
+        else
+        {
+            FileInfoBar.Message = "null list".GetLocalized();
+            FileInfoBar.Severity = InfoBarSeverity.Error;
+        }
+    }
+
 }

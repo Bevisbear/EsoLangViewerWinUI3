@@ -10,4 +10,5 @@ public interface ILangFileService
 {
     List<LangFile> ReadLangWithFileMode(string FilePath);
     List<LuaFile> ReadLuaWithFileMode(string FilePath, bool isPreGame = false);
+    Task<bool> ExportLangDatasToLuaDict(Dictionary<string,string> luaDict);
 }

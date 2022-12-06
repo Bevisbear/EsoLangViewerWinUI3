@@ -4,6 +4,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using EsoLangViewer.Core.Contracts.Services;
 using EsoLangViewer.Core.Models;
 using EsoLangViewer.Core.Services;
+using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
+using Microsoft.UI.Xaml.Controls;
 using Windows.Storage;
 
 namespace EsoLangViewer.ViewModels;
@@ -13,6 +15,9 @@ public class MainViewModel : ObservableRecipient
 
     private bool _islangDataVaild;
     private LangData _selectedLang;
+    private bool _canExportText;
+    private bool _caseSensitive;
+    private bool _exportSelectedLangdata;
     //private ObservableCollection<LangData> _langdata;
 
     public List<Tuple<ushort, string>> SearchType
@@ -37,11 +42,14 @@ public class MainViewModel : ObservableRecipient
         new Tuple<ushort, string> (2, "Only End"),
     };
 
-    public string SearchKeyWord { get; set; }
-    public bool IsLangDataVaild 
-    { 
-        get => _islangDataVaild; 
-        set => SetProperty(ref _islangDataVaild, value); 
+    public string SearchKeyWord
+    {
+        get; set;
+    }
+    public bool IsLangDataVaild
+    {
+        get => _islangDataVaild;
+        set => SetProperty(ref _islangDataVaild, value);
     }
 
     public LangData SelectedLang
@@ -49,7 +57,21 @@ public class MainViewModel : ObservableRecipient
         get => _selectedLang;
         set => SetProperty(ref _selectedLang, value);
     }
-
+    public bool CanExportText
+    {
+        get => _canExportText;
+        set => SetProperty(ref _canExportText, value);
+    }
+    public bool CaseSensitive
+    {
+        get => _caseSensitive;
+        set => SetProperty(ref _caseSensitive, value);
+    }
+    public bool ExportSelectedLangdata
+    {
+        get => _exportSelectedLangdata;
+        set => SetProperty(ref _exportSelectedLangdata, value);
+    }
     public ObservableCollection<LangData> Langdata { get; } = new ObservableCollection<LangData>();
 
     private readonly ILangSearchService _langSearchService;
@@ -180,7 +202,7 @@ public class MainViewModel : ObservableRecipient
         }
 
         //分析 Lua 文件
-        if(luaEn.Count > 1)
+        if (luaEn.Count > 1)
         {
             foreach (var lua in luaEn)
             {
@@ -204,7 +226,7 @@ public class MainViewModel : ObservableRecipient
                     luaData[lua.Id].ContentZh = lua.Content;
                 }
             }
-                
+
         }
 
         //var first10k = langDict.Values.Take(10000);
@@ -236,4 +258,18 @@ public class MainViewModel : ObservableRecipient
         return Langdata.Count > 0;
     }
 
+    public async void ExportToFile(List<LangData> langDatas)
+    {
+        Dictionary<string, string> exportDict = new();
+
+        foreach (var langData in langDatas)
+        {
+            if (langData.LangZh != null && !exportDict.ContainsKey(langData.LangZh) && langData.LangEn != null)
+            {
+                exportDict.Add(langData.LangZh, langData.LangEn);
+            }
+        }
+
+        await _langfileService.ExportLangDatasToLuaDict(exportDict);
+    }
 }

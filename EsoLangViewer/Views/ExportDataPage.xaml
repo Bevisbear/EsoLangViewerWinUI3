@@ -4,9 +4,56 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" MinHeight="50" />
+            <RowDefinition Height="70" MinHeight="50" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <InfoBar x:Name="FileInfoBar" IsOpen="True" Severity="Informational" Grid.Row="0"
+                 IsClosable="False"
+                 Title="File Mode" 
+                 Message="You on the file mode.">
+            <InfoBar.ActionButton>
+                <Button x:Name="ExportButton" Content="Export Data" Click="ExportButton_Click" />
+            </InfoBar.ActionButton>
+        </InfoBar>
+        <ProgressRing x:Name="LoadLangData_InProgress" Grid.Row="0" Visibility="Collapsed"
+                     IsIndeterminate="True" />
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,10,0,10">
+            <ComboBox x:Name="SearchTypeComboBox" ItemsSource="{x:Bind ViewModel.SearchType}" 
+                      Loaded="SearchTypeComboBox_Loaded"
+                      IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
+                      SelectedValuePath="Item1" DisplayMemberPath="Item2"
+                      Height="40" Width="200" Margin="0,0,0,10" />
+
+            <AutoSuggestBox x:Name="SearchBox" PlaceholderText="Search" Text="{x:Bind ViewModel.SearchKeyWord}"
+                            QueryIcon="Find" QuerySubmitted="SearchBox_QuerySubmitted" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
+                            Width="500" Height="40" Margin="10,0,0,10" />
+
+            <ComboBox x:Name="SearchPosComboBox" ItemsSource="{x:Bind ViewModel.SearchPos}" 
+                      Loaded="SearchPosComboBox_Loaded"
+                      IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
+                      SelectedValuePath="Item1" DisplayMemberPath="Item2"
+                      Height="40" Width="200"  Margin="10,0,0,0" />
+        </StackPanel>
+
+        <controls:DataGrid ItemsSource="{x:Bind ViewModel.Langdata, Mode=OneWay}"
+                  SelectedItem="{x:Bind ViewModel.SelectedLang, Mode=TwoWay}"
+                  AutoGenerateColumns="False" 
+                  ColumnWidth="200*" Grid.Row="3" Margin="0,20,0,0" Height="450">
+            <controls:DataGrid.Columns>
+                <!--<controls:DataGridTextColumn Binding="{Binding Id}" Header="文本GUID"  Visibility="Collapsed"/>-->
+                <controls:DataGridTextColumn Binding="{Binding Id}" Header="文本ID"  Visibility="Visible"/>
+                <controls:DataGridTextColumn Binding="{Binding Type}" Header="文本类型"  Visibility="Visible"/>
+                <controls:DataGridTextColumn Binding="{Binding LangEn}" Header="英文"  Visibility="Visible"/>
+                <controls:DataGridTextColumn Binding="{Binding LangZh}" Header="中文"  Visibility="Visible"/>
+                <!--<controls:DataGridTextColumn Binding="{Binding ApiVersion}" Header="版本更新"  Visibility="Collapsed"/>-->
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
     </Grid>
 </Page>

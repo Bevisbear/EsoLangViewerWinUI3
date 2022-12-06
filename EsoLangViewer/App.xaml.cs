@@ -70,8 +70,8 @@ public partial class App : Application
             services.AddTransient<ILangFileService, LangFileService>();
 
             // Views and ViewModels
-            services.AddTransient<ExportDataViewModel>();
-            services.AddTransient<ExportDataPage>();
+            //services.AddTransient<ExportDataViewModel>();
+            //services.AddTransient<ExportDataPage>();
             //services.AddTransient<ImportDataViewModel>();
             //services.AddTransient<ImportDataPage>();
             //services.AddTransient<SearchDataViewModel>();

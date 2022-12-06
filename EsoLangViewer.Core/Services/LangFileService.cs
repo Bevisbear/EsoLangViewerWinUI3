@@ -156,6 +156,36 @@ public class LangFileService : ILangFileService
         return luaResult;
     }
 
+    public async Task<bool> ExportLangDatasToLuaDict(Dictionary<string, string> luaDict)
+    {
+        if (!Directory.Exists("Export"))
+        {
+            Directory.CreateDirectory("Export");
+        }
+
+        using (StreamWriter sw = new StreamWriter(@"Export\" + "npcName.lua"))
+        {
+            await sw.WriteLineAsync("npcNameDict" + " = {}");
+            await sw.WriteLineAsync("npcNameDict" + " = {");
+
+            foreach (var lang in luaDict)
+            {
+                var keyWord = CheckReplaceWord(lang.Key, true);
+                var valueWord = CheckReplaceWord(lang.Value, true);
+
+                string line = "  [\"" + keyWord + "\"] = \"" + valueWord + "\",";    // ["中文名"] = "英文名"
+
+                await sw.WriteLineAsync(line);
+            }
+
+            await sw.WriteLineAsync("}");
+            sw.Flush();
+            sw.Close();
+
+            return true;
+        }
+    }
+
     /// <summary>
     /// Turn hex byte string to byte array.
     /// 
@@ -176,5 +206,38 @@ public class LangFileService : ILangFileService
         return raw;
     }
 
-    
+    private string CheckReplaceWord(string word, bool isReplaceUpAnglebrackets = false)
+    {
+        string replaceWord = @"\" + "\x22";  //replace " to \" for export Lua.
+        string returnWord = word;
+
+        if (returnWord.Contains("\x22"))
+        {
+            returnWord = returnWord.Replace("\x22", replaceWord);
+            //Debug.WriteLine(returnWord);
+        }
+        //if (returnWord.Contains("\x22"))
+        //{
+        //    returnWord = returnWord.Replace("\x22", replaceWord);
+        //    //Debug.WriteLine(returnWord);
+        //}
+
+        if (returnWord.Contains("^") && isReplaceUpAnglebrackets)
+        {
+            //returnWord = returnWord.TrimEnd('^');
+            returnWord = returnWord.Replace("^ns", "");
+            returnWord = returnWord.Replace("^np", "");
+            returnWord = returnWord.Replace("^n", "");
+            returnWord = returnWord.Replace("^p", "");
+            returnWord = returnWord.Replace("^m", "");
+            returnWord = returnWord.Replace("^f", "");
+            returnWord = returnWord.Replace("^N", "");
+            returnWord = returnWord.Replace("^F", "");
+            returnWord = returnWord.Replace("^M", "");
+        }
+        //Debug.WriteLine(returnWord);
+        return returnWord;
+    }
+
+
 }

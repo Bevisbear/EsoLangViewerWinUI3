@@ -15,24 +15,45 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <InfoBar x:Name="FileInfoBar" IsOpen="True" Severity="Informational" Grid.Row="0"
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="500" Width="auto"/>
+                <ColumnDefinition MinWidth="300" Width="400" />
+            </Grid.ColumnDefinitions>
+
+            <InfoBar x:Name="FileInfoBar" IsOpen="True" Severity="Informational" Grid.Column="0"
                  IsClosable="False"
                  Title="File Mode" 
-                 Message="You on the file mode.">
-            <InfoBar.ActionButton>
+                 Message="You on the file mode." Width="500" >
+                <!--<InfoBar.ActionButton>
                 <Button x:Name="OpenFileButton" Content="Browser Data" Click="OpenFileButton_Click" />
-            </InfoBar.ActionButton>
-        </InfoBar>
-        <ProgressRing x:Name="LoadLangData_InProgress" Grid.Row="0" Visibility="Collapsed"
-                     IsIndeterminate="True" />
+            </InfoBar.ActionButton>-->
+
+                <InfoBar.Content>
+                    <ProgressBar x:Name="DataInProgress" Visibility="Collapsed" IsIndeterminate="True" Margin="0,0,0,6" MaxWidth="200"/>
+                </InfoBar.Content>
+
+            </InfoBar>
+            <VariableSizedWrapGrid Orientation="Horizontal" Grid.Column="1" MaximumRowsOrColumns="3" Margin="20,0,0,0">
+                <Button x:Name="OpenFileButton" Content="Browser Data" Click="OpenFileButton_Click" 
+                        Margin="10,0,0,10" VerticalAlignment="Center"/>
+                
+                <Button x:Name="ExportButton" Content="Export Data" Click="ExportButton_Click" 
+                        IsEnabled="{x:Bind ViewModel.CanExportText, Mode=OneWay}"
+                        Margin="10,0,0,10" VerticalAlignment="Center" />
+            </VariableSizedWrapGrid>
+        </Grid>
+        
+        <!--<ProgressRing x:Name="LoadLangData_InProgress" Grid.Row="0" Visibility="Collapsed"
+                     IsIndeterminate="True" />-->
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,10,0,10">
             <ComboBox x:Name="SearchTypeComboBox" ItemsSource="{x:Bind ViewModel.SearchType}" 
                       Loaded="SearchTypeComboBox_Loaded"
                       IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
                       SelectedValuePath="Item1" DisplayMemberPath="Item2"
-                      Height="40" Width="200" Margin="0,0,0,10" />
+                      Height="40" Width="150" Margin="0,0,0,10" />
 
-            <AutoSuggestBox x:Name="SearchBox" PlaceholderText="Search" Text="{x:Bind ViewModel.SearchKeyWord}"
+            <AutoSuggestBox x:Name="SearchBox" PlaceholderText="Search" Text="{x:Bind ViewModel.SearchKeyWord}" VerticalAlignment="Center"
                             QueryIcon="Find" QuerySubmitted="SearchBox_QuerySubmitted" IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
                             Width="500" Height="40" Margin="10,0,0,10" />
 
@@ -40,15 +61,16 @@
                       Loaded="SearchPosComboBox_Loaded"
                       IsEnabled="{x:Bind ViewModel.IsLangDataVaild, Mode=OneWay}"
                       SelectedValuePath="Item1" DisplayMemberPath="Item2"
-                      Height="40" Width="200"  Margin="10,0,0,0" />
+                      Height="40" Width="150"  Margin="10,0,0,0" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,10,0,0">
-            <CheckBox Content="Case Sensitive" />
-            <CheckBox Content="File Mode" IsChecked="True" IsEnabled="False" />
+            <CheckBox Content="Case Sensitive" IsChecked="{x:Bind ViewModel.CaseSensitive, Mode=TwoWay}" />
+            <CheckBox Content="Export Selected LangData" IsChecked="{x:Bind ViewModel.ExportSelectedLangdata, Mode=TwoWay}" />
+            <!--<CheckBox Content="File Mode" IsChecked="True" IsEnabled="False" />-->
         </StackPanel>
 
-        <controls:DataGrid ItemsSource="{x:Bind ViewModel.Langdata, Mode=OneWay}"
+        <controls:DataGrid x:Name="LangDataGrid" ItemsSource="{x:Bind ViewModel.Langdata, Mode=OneWay}"
                   SelectedItem="{x:Bind ViewModel.SelectedLang, Mode=TwoWay}"
                   AutoGenerateColumns="False" 
                   ColumnWidth="200*" Grid.Row="3" Margin="0,20,0,0" Height="450">
